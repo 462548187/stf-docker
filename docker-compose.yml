@@ -30,5 +30,5 @@ stf-local:
     - "7120:7120"
     - "7400-7500:7400-7500"
   restart: always
-  command: stf local --public-ip 172.16.17.6 --no-screen-reset --no-cleanup --lock-rotation true --provider-min-port 7400 --provider-max-port 7500 --adb-host adbd 
+  command: stf local --public-ip YOUR-PUBLIC-IP --no-screen-reset --no-cleanup --lock-rotation true --provider-min-port 7400 --provider-max-port 7500 --adb-host adbd 
 
