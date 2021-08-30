@@ -10,7 +10,7 @@ services:
         - "29015:29015"
       restart: always
       volumes:
-        - "./data:/data"
+        - "rethinkdb-data:/data"
       command: "rethinkdb --bind all --cache-size 2048"
 
     adbd:
