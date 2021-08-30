@@ -1,44 +1,35 @@
-version: "3"
+rethinkdb:
+  container_name: rethinkdb
+  image: buddyspencer/rethinkdb:v2.4.1
+  restart: always
+  volumes:
+      - "rethinkdb-data:/data"
+  command: "rethinkdb --bind all --cache-size 2048"
 
-services:
-    rethinkdb:
-      container_name: rethinkdb
-      image: buddyspencer/rethinkdb:v2.4.1
-      ports:
-        - "8080:8080"
-        - "28015:28015"
-        - "29015:29015"
-      restart: unless-stopped
-      volumes:
-        - "rethinkdb-data:/data"
-      command: "rethinkdb --bind all --cache-size 2048"
+adbd:
+ container_name: adbd
+  build: .
+#  image: devicefarmer/adb:latest
+  privileged: true
+  ports:
+    - "5037:5037"
+  restart: always
+  volumes:
+    - "/dev/bus/usb:/dev/bus/usb"
 
-    adbd:
-      container_name: adbd
-      image: devicefarmer/adb:latest
-      privileged: true
-      ports:
-        - "5037:5037"
-      restart: unless-stopped
-      volumes:
-        - "/dev/bus/usb:/dev/bus/usb"
-
-    stf-local:
-      container_name: stf
-      image: devicefarmer/stf
-      ports:
-        - "7100:7100"
-        - "7110:7110"
-        - "7120:7120"
-        - "7400-7500:7400-7500"
-      environment:
-        - TZ='America/Los_Angeles'
-        - RETHINKDB_PORT_28015_TCP=tcp://rethinkdb:28015
-        - STF_ADMIN_EMAIL=<YOUR_EMAIL>
-        - STF_ADMIN_NAME=<YOUR_NAME>
-      restart: unless-stopped
-      command: stf local --no-screen-reset --no-cleanup --lock-rotation true --provider-min-port 7400 --provider-max-port 7500 --adb-host adbd 
-      
-volumes:
-  rethinkdb-data: {}
-
+stf:
+  container_name: stf
+  image: devicefarmer/stf
+   links:
+    - rethinkdb
+    - adbd
+  ports:
+    - "7100:7100"
+    - "7110:7110"
+    - "7400-7500:7400-7500"
+  environment:
+    - TZ='America/Los_Angeles'
+    - STF_ADMIN_EMAIL=<YOUR_EMAIL>
+    - STF_ADMIN_NAME=<YOUR_NAME>
+  restart: always
+  command: stf local --no-screen-reset --no-cleanup --lock-rotation true --provider-min-port 7400 --provider-max-port 7500 --adb-host adbd
