@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 set -euo pipefail
 
-PLATFORM="linux"
+PLATFORM="mac"
 REPO="https://dl.google.com/android/repository/"
 REPOXML="${REPO}repository-11.xml"
 
