@@ -1,9 +1,9 @@
 FROM alpine:latest
 
 # Set up insecure default key
-RUN mkdir -m 0750 /root/.android
-ADD files/adbkey /root/.android/adbkey
-ADD files/adbkey.pub /root/.android/adbkey.pub
+RUN mkdir -m 0750 /Users/jijiaban/.android
+ADD files/adbkey /Users/jijiaban/.android/adbkey
+ADD files/adbkey.pub /Users/jijiaban/.android/adbkey.pub
 ADD files/update-platform-tools.sh /usr/local/bin/update-platform-tools.sh
 
 RUN set -xeo pipefail && \
